@@ -18,20 +18,22 @@ Upon registration, you will be given
 2. the rights to create your Project
 Initially, all created Projects operate in our Sandbox environment.
 
+More details can be found at [About the Developers Portal](https://docs.dataswyft.com/build/getting-started/developer-dashboard)
+
 ## Technical Requirements
 1. This Github Repo - [PDA HTTP Playground](https://github.com/dataswift/pda-http-playground)
 2. Visual Studio Code
 3. Rest Client extension by Huachao Mao. [Marketplace Link](https://marketplace.visualstudio.com/items?itemName=humao.rest-client). All the instructions with the .http files in this repo are executable.
 
 ## Repo Contents
-This repo contains
-1. README.md
-2. test/rest-client/pda.http
-    * the main purpose of this file is to demonstrate the creating, reading, updating and deleting of records on the PDA
-3. test/rest-client/hatters.http
+The repo contains
+1. this `README.md`
+2. `test/rest-client/provisioner.http`
     * the main purpose of this file is to show how to create a PDA for your application
-    * authenticate a user against his PDA
     * and to make queries about a user
+3. `test/rest-client/pda.http`
+    * authenticate a user against his PDA
+    * the main purpose of this file is to demonstrate the creating, reading, updating and deleting of records on the PDA
 
 ## Basic Concepts
 2. When you register your PDA application in the Developers Portal, you will be given an `application_id`. You'd need the application_id when authenticating the user.

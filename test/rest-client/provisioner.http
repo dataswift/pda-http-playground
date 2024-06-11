@@ -1,0 +1,44 @@
+@PROVISIONER_URL = hatters.dataswift.io
+
+# CHANGEME
+@EMAIL = terry.lee+play@hatcommunity.org
+@EMAIL_ENCODED = terry.lee%2Bplay%40hatcommunity.org
+
+@APPLICATION_ID = oi-s-littledrops
+
+@NAMESPACE = drops
+
+
+###
+# PDA Signup.
+# 1. Note the Streaming response
+# 2. Check your email for the PDA_URL
+# 3. Set your password
+# @name SignUp
+POST https://{{PROVISIONER_URL}}/api/services/daas/signup
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "{{EMAIL}}",
+    "applicationId": "{{APPLICATION_ID}}",
+    "platform": "web",
+    "redirectUri": "http://localhost:4000/callback",
+    "newsletterOptin": false
+}
+
+###
+# PDA/HAT Lookup
+# @name lookup
+GET {{PROVISIONER_URL}}/api/hat/lookup
+    ?email={{EMAIL_ENCODED}}
+    &sandbox=true
+Accept: application/json
+Content-Type: application/json
+
+###
+# Application Info
+# @name applicationInfo
+GET {{PROVISIONER_URL}}/api/applications/{{APPLICATION_ID}}
+Accept: application/json
+Content-Type: application/json

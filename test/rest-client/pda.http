@@ -1,0 +1,115 @@
+@PDA_URL = terryleeplay.hubat.net
+@PDA_USERNAME = terryleeplay
+@PDA_PASSWORD = banana-ice-cream
+@APPLICATION_ID = oi-s-littledrops
+@EMAIL = terry.lee+play@hatcommunity.org
+@EMAIL_ENCODED = terry.lee%2Bplay%40hatcommunity.org
+
+@NAMESPACE = drops
+
+###
+# PDA Authentication
+# @name pdaAuth
+GET https://{{PDA_URL}}/users/access_token
+Accept: application/json
+Content-Type: application/json
+username: {{PDA_USERNAME}}
+password: {{PDA_PASSWORD}}
+
+###
+@PDA_TOKEN = {{pdaAuth.response.body.$.accessToken}}
+
+###
+# Application Authentication/Token Exchange
+# @name applicationAuth
+GET https://{{PDA_URL}}/api/v2.6/applications/{{APPLICATION_ID}}/access-token
+Accept: application/json
+Content-Type: application/json
+X-Auth-Token: {{PDA_TOKEN}}
+
+###
+@APPLICATION_TOKEN = {{applicationAuth.response.body.$.accessToken}}
+
+###
+# Write Profile
+# @name writeProfile
+POST https://{{PDA_URL}}/api/v2/data/{{NAMESPACE}}/profile
+Accept: application/json
+Content-Type: application/json
+X-Auth-Token: {{APPLICATION_TOKEN}}
+
+{
+    "first_name": "Terry",
+    "last_name": "Lee",
+    "primary_residence": {
+        "town": "Cambourne",
+        "state": "Cambridgeshire",
+        "country": "United Kingdom"
+    },
+    "membership": {
+        "expiry": "2025-06-15",
+        "id": "2023CAM092"
+    }
+}
+
+###
+@RECORD_ID = {{writeProfile.response.body.$.recordId}}
+
+###
+# Read Profile
+# @name readProfile
+GET https://{{PDA_URL}}/api/v2/data/{{NAMESPACE}}/profile
+Accept: application/json
+Content-Type: application/json
+X-Auth-Token: {{APPLICATION_TOKEN}}
+
+###
+# Update Profile
+# @name updateProfile
+PUT https://{{PDA_URL}}/api/v2/data
+Accept: application/json
+Content-Type: application/json
+X-Auth-Token: {{APPLICATION_TOKEN}}
+
+[
+    {
+    "endpoint": "{{NAMESPACE}}/profile",
+    "recordId": "{{RECORD_ID}}",
+    "data": {
+        "last_name": "Lee",
+        "first_name": "Terry",
+        "membership": {
+        "id": "2023CAM092",
+        "expiry": "2027-06-15"
+        },
+        "primary_residence": {
+        "town": "Cambourne",
+        "state": "Cambridgeshire",
+        "country": "United Kingdom"
+        },
+        "contact": {
+            "mobile": "07509876543"
+        }
+    }
+    }
+]
+
+###
+# Delete
+# @name delete
+DELETE https://{{PDA_URL}}/api/v2/data?records={{RECORD_ID}}
+Accept: application/json
+Content-Type: application/json
+X-Auth-Token: {{APPLICATION_TOKEN}}
+
+
+###
+# The CORRECT / SECURE way of logging in a User
+# https://docs.dataswyft.com/build/pda-authentication
+# Open the following URL in a Browser / Webview
+# Right click and -> "Copy Request as cUrl"
+https://{{PDA_URL}}/#/hatlogin?name={{APPLICATION_ID}}&redirect=http://localhost:4000
+
+# curl --request GET \
+#   --url 'https://terryleedb1688.hubat.net/#/hatlogin?name=oi-s-littledrops&redirect=http://localhost:4000' \
+#   --header 'user-agent: vscode-restclient'
